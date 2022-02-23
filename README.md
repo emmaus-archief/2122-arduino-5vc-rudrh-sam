@@ -2,7 +2,7 @@
 In deze repo bewaar je alle bestanden die je maakt voor de opdracht Arduino.
 
 ## Stap 0: Starten
-- [ ]	Je hebt je GitHub-inlognaam aan de docent doorgegeven, zodat die een Github-repo kan aanmaken.
+- [x]	Je hebt je GitHub-inlognaam aan de docent doorgegeven, zodat die een Github-repo kan aanmaken.
 - [ ]	Je hebt gekozen wat je gaat maken en dat aan de docent doorgegeven, bij een eigen idee moet de docent het goedkeuren.
 - [ ]	Je hebt thuis een computer of laptop (Arduino werkt niet op een iPad) waarop je de gratis Arduino software hebt geïnstalleerd, of je hebt er rekening mee gehouden dat je een paar uur per week op school op een computer kan werken.
 
