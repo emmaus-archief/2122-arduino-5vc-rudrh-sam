@@ -198,6 +198,29 @@ byte spelerOnder[] = {
   B00000
 };
 
+void knopStatussen (int knopKleur, int ledStatusKleur, int ledKleur) {if (knopStatus == uitKnopLos) {
+   if(digitalRead(knopKleur) == HIGH & ledStatusKleur == LOW) {
+    knopStatus = aanKnopIn;
+    digitalWrite(ledKleur, HIGH);
+    ledStatusKleur = HIGH;
+     }}
+if (knopStatus == aanKnopIn) {
+   if(digitalRead(knopKleur) == LOW & ledStatusKleur == HIGH) {
+    knopStatus = aanKnopLos;
+    digitalWrite(ledKleur, HIGH);
+     }}
+if (knopStatus == aanKnopLos) {
+   if(digitalRead(knopKleur) == HIGH & ledStatusKleur == HIGH) {
+    knopStatus = uitKnopIn;
+    digitalWrite(ledKleur, LOW);
+     }}     
+if (knopStatus == uitKnopIn) {
+   if(digitalRead(knopKleur) == LOW & ledStatusKleur == HIGH) {
+    knopStatus = uitKnopLos;
+    digitalWrite(ledKleur, LOW);
+    ledStatusKleur = LOW;
+     }}
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(knopGeel, INPUT);
