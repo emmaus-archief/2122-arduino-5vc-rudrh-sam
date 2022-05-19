@@ -50,6 +50,9 @@ int positieVijandX = 40;
 int positieVijandBovenY = 0;
 int positieVijandOnderY = 1;
 
+int positieRandom[] = {16, 20, 24, 28, 32, 36};
+int positieRandom2[] = {16, 20, 24, 28, 32, 36};
+
 unsigned long tijd = 0;
 unsigned long tijdNu = 0;
 unsigned long tijdAftelling = 0;
@@ -229,6 +232,18 @@ if (knopStatus == uitKnopIn) {
      return knopKleur;
 }*/
 
+int randomPosities (int positieObjectX) {
+    int x = randomSeed((sizeof(positieRandom) - 1));
+    if (positieRandom[x] > 0) {
+      positieObjectX = positieRandom[x];
+    };
+    positieRandom[x] = 0;
+    if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
+      positieRandom[7] = positieRandom2[7];
+      }
+    return positieObjectX;
+};
+
 void setup() {
   // put your setup code here, to run once:
   pinMode(knopGeel, INPUT);
@@ -240,7 +255,7 @@ void setup() {
   pinMode(ledGroen, OUTPUT);
   pinMode(ledRood, OUTPUT);
   pinMode(ledBlauw, OUTPUT);
-  
+
 }
 
 void loop() {
@@ -479,6 +494,12 @@ void loop() {
     lcd.print(round(score));
     score = score + 0.2;
 
+    positieRechthoekX = randomPosities(positieRechthoekX);
+    positieVierkantX = randomPosities(positieVierkantX);
+    positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
+    positieDriehoekX = randomPosities(positieDriehoekX);
+    positieVijandX = randomPosities(positieVijandX);
+
     lcd.createChar(1, rechthoek);
     lcd.setCursor(positieRechthoekX, positieRechthoekY);
     lcd.write(1);
@@ -513,8 +534,8 @@ void loop() {
     lcd.setCursor(positieVijandX, positieVijandOnderY);
     lcd.write(7);
 
- 
-    if ((tijd > tijdNu + 500 & gameModeStatus == EASY || tijd > tijdNu + 350 & gameModeStatus == NORMAL || tijd > tijdNu + 200 & gameModeStatus == HARD) & (positieRechthoekX < 17 || positieVierkantX < 23 || positieGroteRechthoekX < 29 || positieDriehoekX < 35  || positieVijandX < 41)){
+
+    if (tijd > tijdNu + 500 & gameModeStatus == EASY || tijd > tijdNu + 350 & gameModeStatus == NORMAL || tijd > tijdNu + 200 & gameModeStatus == HARD){
        positieRechthoekX  = positieRechthoekX - 1;
     positieVierkantX = positieVierkantX - 1;
     positieGroteRechthoekX = positieGroteRechthoekX - 1;
@@ -522,25 +543,22 @@ void loop() {
     positieVijandX = positieVijandX - 1;
     tijdNu = millis();
     }
-    
+
   positieGroteRechthoekX = positieObjecten(positieGroteRechthoekX);
   positieDriehoekX = positieObjecten(positieDriehoekX);
   positieVierkantX = positieObjecten(positieVierkantX);
   positieRechthoekX = positieObjecten(positieRechthoekX);
+    positieVijandX = positieObjecten(positieVijandX);
 
-  if (positieRechthoekX < 0) {
-    positieRechthoekX = 39;
-    positieRechthoekY = random(2);
-
-  } 
-  if (positieVijandX < 0) {
-    positieRechthoekX = 16;
-    positieVierkantX = 22;
-    positieGroteRechthoekX = 28;
-    positieDriehoekX = 34;
-    positieVijandX = 40;
+  if (positieVijandX == 0 & positieRechthoekX == 0 & positieVierkantX == 0 & positieDriehoekX == 0 &  positieGroteRechthoekX == 0) {
+    positieRechthoekX = randomPosities(positieRechthoekX);
+    positieVierkantX = randomPosities(positieVierkantX);
+    positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
+    positieDriehoekX = randomPosities(positieDriehoekX);
+    positieVijandX = randomPosities(positieVijandX);
+     positieRechthoekY = random(2);
   }
-
+/*
 if (knopStatus == uitKnopLos) {
    if(digitalRead(knopGeel || knopGroen || knopBlauw || knopRood) == HIGH & (ledStatusGeel  || ledStatusGroen  || ledStatusBlauw  || ledStatusRood) == LOW) {
     knopStatus = aanKnopIn;
@@ -565,14 +583,14 @@ if (knopStatus == uitKnopIn) {
      }
      }
 }
-/*
+
  knopGeel = knopStatussen(knopGeel);
  knopGroen = knopStatussen (knopGroen);
  knopRood = knopStatussen (knopRood);
  knopBlauw = knopStatussen (knopBlauw);
 */
-  
-/*
+
+
   if (knopStatus == uitKnopLos) {
   if(digitalRead(knopGeel) == HIGH & ledStatusGeel == LOW) {
    knopStatus = aanKnopIn;
@@ -643,7 +661,7 @@ if (knopStatus == uitKnopIn) {
     }
   }
   }
-  */
+ 
 
   if (gameStatus == OBSTAKEL) {
     lcd.begin(16, 2);
@@ -684,12 +702,12 @@ if (knopStatus == uitKnopIn) {
       regelPagina = -1;
       tijdPagina = tijd;
       aftelling = 6;
-      positieRechthoekX = 16;
-      positieVierkantX = 22;
-      positieGroteRechthoekX = 28;
-      positieDriehoekX = 34;
-      positieVijandX = 40;
       gameModeStatus = EASY;
+        positieRechthoekX = randomPosities(positieRechthoekX);
+    positieVierkantX = randomPosities(positieVierkantX);
+    positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
+    positieDriehoekX = randomPosities(positieDriehoekX);
+    positieVijandX = randomPosities(positieVijandX);
     }
   }
 
