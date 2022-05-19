@@ -233,14 +233,18 @@ if (knopStatus == uitKnopIn) {
 }*/
 
 int randomPosities (int positieObjectX) {
-    analogRead(0);
     int x = random(sizeof(positieRandom)- 1);
     if (positieRandom[x] > 0) {
       positieObjectX = positieRandom[x];
     };
     positieRandom[x] = 0;
     if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
-      positieRandom[6] = positieRandom2[6];
+      positieRandom[0] = positieRandom2[0];
+      positieRandom[1] = positieRandom2[1];
+      positieRandom[2] = positieRandom2[2];
+      positieRandom[3] = positieRandom2[3];
+      positieRandom[4] = positieRandom2[4];
+      positieRandom[5] = positieRandom2[5];
       }
     return positieObjectX;
 };
@@ -257,6 +261,7 @@ void setup() {
   pinMode(ledRood, OUTPUT);
   pinMode(ledBlauw, OUTPUT);
   randomSeed(analogRead(0));
+   Serial.begin(9600);
 }
 
 void loop() {
@@ -268,6 +273,8 @@ void loop() {
   knopStatusWit = digitalRead(knopWit);
 
   tijd = millis();
+
+  Serial.println(positieRechthoekX);
 
   if (gameStatus == STARTSCHERM) {
       lcd.begin(16, 2);
@@ -489,17 +496,21 @@ void loop() {
     gameStatus = GAMEOVER;
   }
   }
+
   if(gameStatus == SPELEN || gameStatus == OBSTAKEL) {
     lcd.begin(16, 2);
     lcd.setCursor(12, 0);
     lcd.print(round(score));
     score = score + 0.2;
 
-    positieRechthoekX = randomPosities(positieRechthoekX);
+   if(tijd > tijdNu + 20000) {
+  positieRechthoekX = randomPosities(positieRechthoekX);
     positieVierkantX = randomPosities(positieVierkantX);
     positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
     positieDriehoekX = randomPosities(positieDriehoekX);
     positieVijandX = randomPosities(positieVijandX);
+    tijdNu = millis();
+}
 
     lcd.createChar(1, rechthoek);
     lcd.setCursor(positieRechthoekX, positieRechthoekY);
@@ -536,7 +547,7 @@ void loop() {
     lcd.write(7);
 
 
-    if (tijd > tijdNu + 500 & gameModeStatus == EASY || tijd > tijdNu + 350 & gameModeStatus == NORMAL || tijd > tijdNu + 200 & gameModeStatus == HARD){
+    if ((tijd > tijdNu + 500 & gameModeStatus == EASY || tijd > tijdNu + 350 & gameModeStatus == NORMAL || tijd > tijdNu + 200 & gameModeStatus == HARD) & (positieRechthoekX < positieRechthoekX + 1 || positieVierkantX < positieVierkantX + 1 || positieGroteRechthoekX < positieGroteRechthoekX + 1 || positieDriehoekX < positieDriehoekX + 1 || positieVijandX < positieVijandX + 1)){
        positieRechthoekX  = positieRechthoekX - 1;
     positieVierkantX = positieVierkantX - 1;
     positieGroteRechthoekX = positieGroteRechthoekX - 1;
@@ -551,13 +562,8 @@ void loop() {
   positieRechthoekX = positieObjecten(positieRechthoekX);
     positieVijandX = positieObjecten(positieVijandX);
 
-if(randomPosities > 17) {
-  positieRechthoekX = randomPosities(positieRechthoekX);
-    positieVierkantX = randomPosities(positieVierkantX);
-    positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
-    positieDriehoekX = randomPosities(positieDriehoekX);
-    positieVijandX = randomPosities(positieVijandX);
-}
+
+
   if (positieVijandX == 0 & positieRechthoekX == 0 & positieVierkantX == 0 & positieDriehoekX == 0 &  positieGroteRechthoekX == 0) {
      positieRechthoekY = random(2);
   }
@@ -586,7 +592,6 @@ if (knopStatus == uitKnopIn) {
      }
      }
 }
-
  knopGeel = knopStatussen(knopGeel);
  knopGroen = knopStatussen (knopGroen);
  knopRood = knopStatussen (knopRood);
@@ -706,11 +711,11 @@ if (knopStatus == uitKnopIn) {
       tijdPagina = tijd;
       aftelling = 6;
       gameModeStatus = EASY;
-       positieRechthoekX = 16;
-      positieVierkantX = 22;
-      positieGroteRechthoekX = 28;
-      positieDriehoekX = 34;
-      positieVijandX = 40;
+       positieRechthoekX = randomPosities(positieRechthoekX) + 20;
+    positieVierkantX = randomPosities(positieVierkantX) + 20;
+    positieGroteRechthoekX = randomPosities(positieGroteRechthoekX) + 20;
+    positieDriehoekX = randomPosities(positieDriehoekX) + 20;
+    positieVijandX = randomPosities(positieVijandX) + 20;
     }
   }
 
