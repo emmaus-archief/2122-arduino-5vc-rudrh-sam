@@ -233,13 +233,14 @@ if (knopStatus == uitKnopIn) {
 }*/
 
 int randomPosities (int positieObjectX) {
-    int x = randomSeed((sizeof(positieRandom) - 1));
+    analogRead(0);
+    int x = random(sizeof(positieRandom)- 1);
     if (positieRandom[x] > 0) {
       positieObjectX = positieRandom[x];
     };
     positieRandom[x] = 0;
     if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
-      positieRandom[7] = positieRandom2[7];
+      positieRandom[6] = positieRandom2[6];
       }
     return positieObjectX;
 };
@@ -255,7 +256,7 @@ void setup() {
   pinMode(ledGroen, OUTPUT);
   pinMode(ledRood, OUTPUT);
   pinMode(ledBlauw, OUTPUT);
-
+  randomSeed(analogRead(0));
 }
 
 void loop() {
@@ -550,12 +551,14 @@ void loop() {
   positieRechthoekX = positieObjecten(positieRechthoekX);
     positieVijandX = positieObjecten(positieVijandX);
 
-  if (positieVijandX == 0 & positieRechthoekX == 0 & positieVierkantX == 0 & positieDriehoekX == 0 &  positieGroteRechthoekX == 0) {
-    positieRechthoekX = randomPosities(positieRechthoekX);
+if(randomPosities > 17) {
+  positieRechthoekX = randomPosities(positieRechthoekX);
     positieVierkantX = randomPosities(positieVierkantX);
     positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
     positieDriehoekX = randomPosities(positieDriehoekX);
     positieVijandX = randomPosities(positieVijandX);
+}
+  if (positieVijandX == 0 & positieRechthoekX == 0 & positieVierkantX == 0 & positieDriehoekX == 0 &  positieGroteRechthoekX == 0) {
      positieRechthoekY = random(2);
   }
 /*
@@ -703,11 +706,11 @@ if (knopStatus == uitKnopIn) {
       tijdPagina = tijd;
       aftelling = 6;
       gameModeStatus = EASY;
-        positieRechthoekX = randomPosities(positieRechthoekX);
-    positieVierkantX = randomPosities(positieVierkantX);
-    positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
-    positieDriehoekX = randomPosities(positieDriehoekX);
-    positieVijandX = randomPosities(positieVijandX);
+       positieRechthoekX = 16;
+      positieVierkantX = 22;
+      positieGroteRechthoekX = 28;
+      positieDriehoekX = 34;
+      positieVijandX = 40;
     }
   }
 
