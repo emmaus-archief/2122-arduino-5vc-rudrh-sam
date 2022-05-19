@@ -245,7 +245,8 @@ int randomPosities (int positieObjectX) {
       positieObjectX = positieRandom[x] * 4;
     };
     
-    memcpy(positieRandom, positieRandom2, sizeof(positieRandom2));
+    if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
+    memcpy(positieRandom, positieRandom2, sizeof(positieRandom2));};
            return positieObjectX;
 };
 
