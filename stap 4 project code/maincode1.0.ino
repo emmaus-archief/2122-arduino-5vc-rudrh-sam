@@ -34,24 +34,24 @@ int positieSpelerOnderY = 1;
 int positieRechthoekX = 16;
 int positieRechthoekY = random(2);
 
-int positieVierkantX = 22;
+int positieVierkantX = 20;
 int positieVierkantBovenY = 0;
 int positieVierkantOnderY = 1;
 
-int positieGroteRechthoekX = 28;
+int positieGroteRechthoekX = 24;
 int positieGroteRechthoekBovenY = 0;
 int positieGroteRechthoekOnderY = 1;
 
-int positieDriehoekX = 34;
+int positieDriehoekX = 28;
 int positieDriehoekBovenY = 0;
 int positieDriehoekOnderY = 1;
 
-int positieVijandX = 40;
+int positieVijandX = 32;
 int positieVijandBovenY = 0;
 int positieVijandOnderY = 1;
 
-int positieRandom[6] = {4, 5, 6, 7, 8, 9,};
-int positieRandom2[6] = {4, 5, 6, 7, 8, 9,};
+int positieRandom[5] = {4, 5, 6, 7, 8};
+PROGMEM const int positieRandom2[5] = {4, 5, 6, 7, 8};
 
 unsigned long tijd = 0;
 unsigned long tijdNu = 0;
@@ -77,7 +77,7 @@ int gameModeStatus = EASY;
 
 float score = 0;
 
-int aftelling = 6;
+int aftelling = 4;
 
 int regelPagina = 0;
 
@@ -207,7 +207,8 @@ int positieObjecten (int positieObject) {
     bewegen = bewegen - 1;
     }
     if (bewegen == 0) {
-      positieObject = 39;
+      positieObject = 32;
+       positieRechthoekY = random(2);
     }
     return positieObject;
   }
@@ -240,19 +241,12 @@ if (knopStatus == uitKnopIn) {
 
 int randomPosities (int positieObjectX) {
     int x = random(sizeof(positieRandom)- 1);
-    round(x);
     if (positieRandom[x] > 0) {
       positieObjectX = positieRandom[x] * 4;
     };
-    if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
-      positieRandom[0] = positieRandom2[0];
-      positieRandom[1] = positieRandom2[1];
-      positieRandom[2] = positieRandom2[2];
-      positieRandom[3] = positieRandom2[3];
-      positieRandom[4] = positieRandom2[4];
-      positieRandom[5] = positieRandom2[5];
-      }
-    return positieObjectX;
+    
+    memcpy(positieRandom, positieRandom2, sizeof(positieRandom2));
+           return positieObjectX;
 };
 
 void setup() {
@@ -280,7 +274,7 @@ void loop() {
 
   tijd = millis();
 
-  Serial.println(positieRechthoekX);
+ Serial.println(positieVierkantX);
 
   if (gameStatus == STARTSCHERM) {
       lcd.begin(16, 2);
@@ -509,7 +503,7 @@ void loop() {
     lcd.print(round(score));
     score = score + 0.2;
 
-if (positieRechthoekX +  positieVierkantX + positieGroteRechthoekX + positieDriehoekX + positieVijandX  >= 190) {
+if (positieRechthoekX +  positieVierkantX + positieGroteRechthoekX + positieDriehoekX + positieVijandX  >= 150) {
   positieRechthoekX = randomPosities(positieRechthoekX);
     positieVierkantX = randomPosities(positieVierkantX);
     positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
@@ -568,11 +562,6 @@ if (positieRechthoekX +  positieVierkantX + positieGroteRechthoekX + positieDrie
   positieRechthoekX = positieObjecten(positieRechthoekX);
     positieVijandX = positieObjecten(positieVijandX);
 
-
-
-  if (positieRechthoekX > 16) {
-     positieRechthoekY = random(2);
-  }
 /*
 if (knopStatus == uitKnopLos) {
    if(digitalRead(knopGeel || knopGroen || knopBlauw || knopRood) == HIGH & (ledStatusGeel  || ledStatusGroen  || ledStatusBlauw  || ledStatusRood) == LOW) {
@@ -715,13 +704,13 @@ if (knopStatus == uitKnopIn) {
       score = 0;
       regelPagina = -1;
       tijdPagina = tijd;
-      aftelling = 6;
+      aftelling = 4;
       gameModeStatus = EASY;
       positieRechthoekX = 16;
-      positieVierkantX = 22;
-      positieGroteRechthoekX = 28;
-      positieDriehoekX = 34;
-      positieVijandX = 40;
+      positieVierkantX = 20;
+      positieGroteRechthoekX = 24;
+      positieDriehoekX = 28;
+      positieVijandX = 32;
        bewegen = 5;
     }
   }
