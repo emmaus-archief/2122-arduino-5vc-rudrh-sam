@@ -50,8 +50,8 @@ int positieVijandX = 40;
 int positieVijandBovenY = 0;
 int positieVijandOnderY = 1;
 
-int positieRandom[] = {16, 20, 24, 28, 32, 36};
-int positieRandom2[] = {16, 20, 24, 28, 32, 36};
+int positieRandom[6] = {4, 5, 6, 7, 8, 9,};
+int positieRandom2[6] = {4, 5, 6, 7, 8, 9,};
 
 unsigned long tijd = 0;
 unsigned long tijdNu = 0;
@@ -88,6 +88,8 @@ const int uitKnopIn = 1;
 const int aanKnopIn = 2;
 const int aanKnopLos = 3;
 int knopStatus = 0;
+
+int bewegen = 5;
 
 byte rechthoek[] = {
   B11111,
@@ -202,6 +204,10 @@ byte spelerOnder[] = {
 int positieObjecten (int positieObject) {
     if (positieObject < 0) {
     positieObject = 39;
+    bewegen = bewegen - 1;
+    }
+    if (bewegen == 0) {
+      positieObject = 39;
     }
     return positieObject;
   }
@@ -234,10 +240,10 @@ if (knopStatus == uitKnopIn) {
 
 int randomPosities (int positieObjectX) {
     int x = random(sizeof(positieRandom)- 1);
+    round(x);
     if (positieRandom[x] > 0) {
-      positieObjectX = positieRandom[x];
+      positieObjectX = positieRandom[x] * 4;
     };
-    positieRandom[x] = 0;
     if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
       positieRandom[0] = positieRandom2[0];
       positieRandom[1] = positieRandom2[1];
@@ -503,13 +509,13 @@ void loop() {
     lcd.print(round(score));
     score = score + 0.2;
 
-   if(tijd > tijdNu + 20000) {
+if (positieRechthoekX +  positieVierkantX + positieGroteRechthoekX + positieDriehoekX + positieVijandX  >= 190) {
   positieRechthoekX = randomPosities(positieRechthoekX);
     positieVierkantX = randomPosities(positieVierkantX);
     positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
     positieDriehoekX = randomPosities(positieDriehoekX);
     positieVijandX = randomPosities(positieVijandX);
-    tijdNu = millis();
+    bewegen = 5;
 }
 
     lcd.createChar(1, rechthoek);
@@ -547,7 +553,7 @@ void loop() {
     lcd.write(7);
 
 
-    if ((tijd > tijdNu + 500 & gameModeStatus == EASY || tijd > tijdNu + 350 & gameModeStatus == NORMAL || tijd > tijdNu + 200 & gameModeStatus == HARD) & (positieRechthoekX < positieRechthoekX + 1 || positieVierkantX < positieVierkantX + 1 || positieGroteRechthoekX < positieGroteRechthoekX + 1 || positieDriehoekX < positieDriehoekX + 1 || positieVijandX < positieVijandX + 1)){
+    if ((tijd > tijdNu + 500 & gameModeStatus == EASY || tijd > tijdNu + 350 & gameModeStatus == NORMAL || tijd > tijdNu + 200 & gameModeStatus == HARD) & bewegen > 0){
        positieRechthoekX  = positieRechthoekX - 1;
     positieVierkantX = positieVierkantX - 1;
     positieGroteRechthoekX = positieGroteRechthoekX - 1;
@@ -564,7 +570,7 @@ void loop() {
 
 
 
-  if (positieVijandX == 0 & positieRechthoekX == 0 & positieVierkantX == 0 & positieDriehoekX == 0 &  positieGroteRechthoekX == 0) {
+  if (positieRechthoekX > 16) {
      positieRechthoekY = random(2);
   }
 /*
@@ -711,11 +717,12 @@ if (knopStatus == uitKnopIn) {
       tijdPagina = tijd;
       aftelling = 6;
       gameModeStatus = EASY;
-       positieRechthoekX = randomPosities(positieRechthoekX) + 20;
-    positieVierkantX = randomPosities(positieVierkantX) + 20;
-    positieGroteRechthoekX = randomPosities(positieGroteRechthoekX) + 20;
-    positieDriehoekX = randomPosities(positieDriehoekX) + 20;
-    positieVijandX = randomPosities(positieVijandX) + 20;
+      positieRechthoekX = 16;
+      positieVierkantX = 22;
+      positieGroteRechthoekX = 28;
+      positieDriehoekX = 34;
+      positieVijandX = 40;
+       bewegen = 5;
     }
   }
 
