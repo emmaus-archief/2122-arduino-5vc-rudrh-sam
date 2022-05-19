@@ -239,7 +239,12 @@ int randomPosities (int positieObjectX) {
     };
     positieRandom[x] = 0;
     if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
-      positieRandom[6] = positieRandom2[6];
+      positieRandom[0] = positieRandom2[0];
+      positieRandom[1] = positieRandom2[1];
+      positieRandom[2] = positieRandom2[2];
+      positieRandom[3] = positieRandom2[3];
+      positieRandom[4] = positieRandom2[4];
+      positieRandom[5] = positieRandom2[5];
       }
     return positieObjectX;
 };
