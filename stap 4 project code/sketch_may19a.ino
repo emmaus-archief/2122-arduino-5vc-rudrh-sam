@@ -243,13 +243,12 @@ if (knopStatus == uitKnopIn) {
 // deze functie vult een random waarde in de array in waardoor het object iedere keer en andere waarde uit de array krijgt, hierdoor is het randomised, maar wel met vaste intervallen.
 int randomPosities (int positieObjectX) {
     int x = random(6);
-    if (positieRandom[x] > 0) {
+    if (positieRandom[x] > -1) {
       positieObjectX = positieRandom[x];
     }
     else {
-
-// nadat een waarde toegewezen is wordt die waarde nul. Als alle waardes nul zijn qwordt de array gereset.
-    positieRandom[x] = 0;};
+    positieRandom[x] = -1;
+};
     if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
       positieRandom[0] = positieRandom2[0];
       positieRandom[1] = positieRandom2[1];
