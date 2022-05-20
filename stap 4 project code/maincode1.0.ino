@@ -247,7 +247,7 @@ int randomPosities (int positieObjectX) {
       positieObjectX = positieRandom[x];
       positieRandom[x] = -1;
 };
-    if (positieRandom[0] == -1 & positieRandom[1] == -1 &  positieRandom[2] == -1 &  positieRandom[3] == -1 & positieRandom[4] == -1 & positieRandom[5] == -1) {
+    if (positieRandom[0] == -1 & positieRandom[1] == -1 &  positieRandom[2] == -1 &  positieRandom[3] == -1 & positieRandom[4] == -1) {
       positieRandom[0] = positieRandom2[0];
       positieRandom[1] = positieRandom2[1];
       positieRandom[2] = positieRandom2[2];
