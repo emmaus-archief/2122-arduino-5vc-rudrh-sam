@@ -201,6 +201,7 @@ byte spelerOnder[] = {
   B00000
 };
 
+// functie die ervoor zorgt dat een object teruggeplaatst wordt als het van het scherm gaat.
 int positieObjecten (int positieObject) {
     if (positieObject < 0) {
     positieObject = 39;
@@ -239,12 +240,14 @@ if (knopStatus == uitKnopIn) {
      return knopKleur;
 }*/
 
+// deze functie vult een random waarde in de array in waardoor het object iedere keer en andere waarde uit de array krijgt, hierdoor is het randomised, maar wel met vaste intervallen.
 int randomPosities (int positieObjectX) {
     int x = random(6);
     if (positieRandom[x] > -1) {
       positieObjectX = positieRandom[x];
     };
- 
+
+// nadat een waarde toegewezen is wordt die waarde nul. Als alle waardes nul zijn qwordt de array gereset.
     positieRandom[x] = 0;
     if (positieRandom[0] == 0 & positieRandom[1] == 0 &  positieRandom[2] == 0 &  positieRandom[3] == 0 & positieRandom[4] == 0 & positieRandom[5] == 0) {
       positieRandom[0] = positieRandom2[0];
@@ -521,17 +524,18 @@ if (positieRechthoekX +  positieVierkantX + positieGroteRechthoekX + positieDrie
     bewegen = 5;
 }
 
-if(positieVierkantX != (positieDriehoekX || positieGroteRechthoekX || positieRechthoekX || positieVijandX) ||
-   positieRechthoekX != (positieDriehoekX || positieGroteRechthoekX || positieVierkantX || positieVijandX) || 
-   positieGroteRechthoekX != (positieDriehoekX || positieRechthoekX || positieVierkantX || positieVijandX) ||
-   positieDriehoekX != (positieVierkantX || positieRechthoekX || positieGroteRechthoekX || positieVijandX) ||
-   positieVijandX != (positieDriehoekX || positieRechthoekX || positieVierkantX || positieGroteRechthoekX)) {
-}
-else {positieVierkantX = -1;
+if(positieVierkantX == (positieDriehoekX || positieGroteRechthoekX || positieRechthoekX || positieVijandX) ||
+   positieRechthoekX == (positieDriehoekX || positieGroteRechthoekX || positieVierkantX || positieVijandX) || 
+   positieGroteRechthoekX == (positieDriehoekX || positieRechthoekX || positieVierkantX || positieVijandX) ||
+   positieDriehoekX == (positieVierkantX || positieRechthoekX || positieGroteRechthoekX || positieVijandX) ||
+   positieVijandX == (positieDriehoekX || positieRechthoekX || positieVierkantX || positieGroteRechthoekX)) {
+    
+  positieVierkantX = -1;
   positieDriehoekX = -1;
   positieGroteRechthoekX = -1;
   positieRechthoekX = -1;
   positieVijandX = -1; 
+  bewegen = 0;
 };
 
 
