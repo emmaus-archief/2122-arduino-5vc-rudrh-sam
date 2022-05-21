@@ -27,6 +27,7 @@ int ledStatusRood = LOW;
 
 int positieSpelerX = 0;
 int positieSpelerY = 0;
+int kamehamehaX = 1;
 
 int positieSpelerBovenY = 0;
 int positieSpelerOnderY = 1;
@@ -34,30 +35,36 @@ int positieSpelerOnderY = 1;
 int positieRechthoekX = 16;
 int positieRechthoekY = random(2);
 
-int positieVierkantX = 20;
+int positieVierkantX = 22;
 int positieVierkantBovenY = 0;
 int positieVierkantOnderY = 1;
 
-int positieGroteRechthoekX = 24;
-int positieGroteRechthoekBovenY = 0;
-int positieGroteRechthoekOnderY = 1;
+int positieVaderX = 28;
+int positieVaderBovenY = 0;
+int positieVaderOnderY = 1;
+int positieZwaardAchterX = positieVaderX - 1;
+int positieZwaardVoorX = positieVaderX - 2;
 
-int positieDriehoekX = 28;
+int positieDriehoekX = 34;
 int positieDriehoekBovenY = 0;
 int positieDriehoekOnderY = 1;
 
-int positieVijandX = 32;
+int positieVijandX = 40;
 int positieVijandBovenY = 0;
 int positieVijandOnderY = 1;
+int positieBlastAchterX =  positieVijandX - 1;
+int positieBlastVoorX =  positieVijandX - 2;
 
-int positieRandom[5] = {16, 20, 24, 28, 32};
-int positieRandom2[5] = {16, 20, 24, 28, 32};
+
+int positieRandom[] = {16, 22, 28, 34, 40};
+int positieRandom2[] = {16, 22, 28, 34, 40};
 
 unsigned long tijd = 0;
 unsigned long tijdNu = 0;
 unsigned long tijdAftelling = 0;
 unsigned long tijdPagina = 0;
 unsigned long tijdGameMode = 0;
+unsigned long tijdHart = 0;
 
 
 const int STARTSCHERM = 0;
@@ -76,6 +83,8 @@ const int HARD = 2;
 int gameModeStatus = EASY;
 
 float score = 0;
+
+float hartjes = 0;
 
 int aftelling = 4;
 
@@ -103,15 +112,27 @@ byte rechthoek[] = {
 };
 
 byte speler[] = {
-  B01110,
-  B01111,
+  B00000,
+  B00000,
+  B11100,
+  B11000,
+  B11100,
   B11101,
-  B11111,
-  B11110,
-  B11110,
-  B01010,
-  B01010
+  B10100,
+  B10100
 };
+
+byte kamehameha[] = {
+  B00000,
+  B00000,
+  B00000,
+  B00000,
+  B00000,
+  B11111,
+  B00000,
+  B00000
+};
+
 
 byte vierkantBoven[] = {
   B00000,
@@ -179,6 +200,28 @@ byte vijandLichaamOnder[] = {
   B11011
 };
 
+byte blastAchter[] = {
+  B01111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B11111,
+  B01111
+};
+
+byte blastVoor[] = {
+  B00000,
+  B00111,
+  B01111,
+  B11111,
+  B11111,
+  B01111,
+  B00111,
+  B00000
+};
+
 byte spelerBoven[] = {
   B00000,
   B00000,
@@ -201,6 +244,51 @@ byte spelerOnder[] = {
   B00000
 };
 
+byte vaderOnder[] = {
+  B01111,
+  B01111,
+  B01111,
+  B01011,
+  B01010,
+  B01010,
+  B01010,
+  B01010
+};
+
+byte vaderBoven[] = {
+  B01110,
+  B11110,
+  B10110,
+  B11111,
+  B11111,
+  B01111,
+  B01111,
+  B01111
+};
+
+byte zwaardAchter[] = {
+  B00000,
+  B11000,
+  B11000,
+  B11111,
+  B11111,
+  B11000,
+  B11000,
+  B00000
+};
+
+byte zwaardVoor[] = {
+  B00000,
+  B00000,
+  B00000,
+  B11111,
+  B11111,
+  B00000,
+  B00000,
+  B00000
+};
+
+
 // functie die ervoor zorgt dat een object teruggeplaatst wordt als het van het scherm gaat.
 int positieObjecten (int positieObject) {
     if (positieObject < 0) {
@@ -210,6 +298,7 @@ int positieObjecten (int positieObject) {
     if (bewegen == 0) {
       positieObject = 39;
        positieRechthoekY = random(2);
+       bewegen = 5;
     }
     return positieObject;
   }
@@ -242,7 +331,7 @@ if (knopStatus == uitKnopIn) {
 
 // deze functie vult een random waarde in de array in waardoor het object iedere keer en andere waarde uit de array krijgt, hierdoor is het randomised, maar wel met vaste intervallen.
 int randomPosities (int positieObjectX) {
-    int x = random(6);
+    int x = random(5);
     if (positieRandom[x] > -1) {
       positieObjectX = positieRandom[x];
       positieRandom[x] = -1;
@@ -253,7 +342,6 @@ int randomPosities (int positieObjectX) {
       positieRandom[2] = positieRandom2[2];
       positieRandom[3] = positieRandom2[3];
       positieRandom[4] = positieRandom2[4];
-      positieRandom[5] = positieRandom2[5];
       }
            return positieObjectX;
 };
@@ -270,7 +358,6 @@ void setup() {
   pinMode(ledGroen, OUTPUT);
   pinMode(ledRood, OUTPUT);
   pinMode(ledBlauw, OUTPUT);
-  randomSeed(analogRead(0));
    Serial.begin(9600);
 }
 
@@ -341,12 +428,18 @@ void loop() {
 
    if (regelPagina == 2) {
       lcd.begin(16, 2);
-      lcd.createChar(1, rechthoek);
+      lcd.createChar(1, vaderOnder);
     lcd.setCursor(14, 1);
     lcd.write(1);
-    lcd.createChar(1, rechthoek);
+    lcd.createChar(2, vaderBoven);
     lcd.setCursor(14, 0);
-    lcd.write(1);
+    lcd.write(2);
+    lcd.createChar(3, zwaardAchter);
+    lcd.setCursor(13, 0);
+    lcd.write(3);
+    lcd.createChar(4, zwaardVoor);
+    lcd.setCursor(12, 0);
+    lcd.write(4);
     lcd.setCursor(0, 0);
     lcd.print("Press Blue");
     lcd.setCursor(0, 1);
@@ -385,6 +478,18 @@ void loop() {
     lcd.createChar(2, vijandLichaamOnder);
     lcd.setCursor(14, 1);
     lcd.write(2);
+    lcd.createChar(3, blastAchter);
+    lcd.setCursor(13, 1);
+    lcd.write(3);
+    lcd.createChar(3, blastAchter);
+    lcd.setCursor(13, 0);
+    lcd.write(3);
+    lcd.createChar(4, blastVoor);
+    lcd.setCursor(12, 0);
+    lcd.write(4);
+    lcd.createChar(4, blastVoor);
+    lcd.setCursor(12, 1);
+    lcd.write(4);
     lcd.setCursor(0, 0);
     lcd.print("Press Red");
     lcd.setCursor(0, 1);
@@ -409,13 +514,11 @@ void loop() {
       regelPagina = 0;
     }
      if(tijd > tijdPagina + 500) {
-        regelPagina = 6;
-      }
-
-    if (knopStatusWit == HIGH) {
+        if (knopStatusWit == HIGH) {
       gameStatus = GAMEMODE;
       tijdGameMode = tijd;
     }
+      }
   }
 
   if(gameStatus == GAMEMODE) {
@@ -490,6 +593,26 @@ void loop() {
     lcd.setCursor(positieSpelerX, positieSpelerY);
     lcd.write(1);
 
+     lcd.createChar(2, kamehameha);
+    lcd.setCursor(kamehamehaX, positieSpelerY);
+    lcd.write(2);
+
+    if ((ledStatusRood == HIGH || ledStatusBlauw == HIGH) & kamehamehaX < 17) {
+      kamehamehaX = kamehamehaX + 1;
+      delay(100);
+    } else if (ledStatusRood == LOW || ledStatusBlauw == LOW || kamehamehaX > 16) {
+      kamehamehaX = 1;
+    }
+
+    if (kamehamehaX == positieVijandX & ledStatusRood == HIGH) {
+      positieVijandX = -1;
+    }
+
+     if (kamehamehaX == positieVaderX & ledStatusBlauw == HIGH) {
+      positieVaderX = -1;
+    }
+
+
     if (knopStatusWit == HIGH & positieSpelerY == 1) {
       positieSpelerY = positieSpelerY - 1;
       delay(200);
@@ -498,13 +621,19 @@ void loop() {
       delay(200);
     }
 
-    if(knopStatusGeel == HIGH || knopStatusBlauw == HIGH || knopStatusGroen == HIGH || knopStatusRood == HIGH) {
+    if(knopStatusGeel == HIGH || knopStatusGroen == HIGH) {
       gameStatus = OBSTAKEL;
     }  
-/*
-    if (positieRechthoekX == positieSpelerX & positieRechthoekY == positieSpelerY || positieVierkantX == positieSpelerX || positieGroteRechthoekX == positieSpelerX || positieDriehoekX == positieSpelerX || positieVijandX == positieSpelerX) {
+
+    if ((positieRechthoekX == positieSpelerX & positieRechthoekY == positieSpelerY || positieVierkantX == positieSpelerX || positieZwaardVoorX == positieSpelerX  || positieBlastVoorX == positieSpelerX) & tijd > tijdHart + 500) {
+    hartjes = hartjes - 1;
+    tijdHart = tijd;
+    delay(1000);
+  } if ((positieRechthoekX == positieSpelerX & positieRechthoekY == positieSpelerY || positieVierkantX == positieSpelerX || positieZwaardVoorX == positieSpelerX  || positieBlastVoorX == positieSpelerX) & hartjes < 1) {
     gameStatus = GAMEOVER;
-  }*/
+  }
+  
+ 
   }
 
   if(gameStatus == SPELEN || gameStatus == OBSTAKEL) {
@@ -512,29 +641,33 @@ void loop() {
     lcd.setCursor(12, 0);
     lcd.print(round(score));
     score = score + 0.2;
+    
+    lcd.setCursor(2, 0);
+    lcd.print(round(hartjes));
 
-if (positieRechthoekX +  positieVierkantX + positieGroteRechthoekX + positieDriehoekX + positieVijandX  >= 190) {
+
+ positieZwaardAchterX = positieVaderX - 1;
+ positieZwaardVoorX = positieVaderX - 2;
+ positieBlastAchterX =  positieVijandX - 1;
+ positieBlastVoorX =  positieVijandX - 2;
+
+
+if (positieRechthoekX +  positieVierkantX + positieVaderX + positieDriehoekX + positieVijandX  >= 190) {
   positieRechthoekX = randomPosities(positieRechthoekX);
     positieVierkantX = randomPosities(positieVierkantX);
-    positieGroteRechthoekX = randomPosities(positieGroteRechthoekX);
+    positieVaderX = randomPosities(positieVaderX);
     positieDriehoekX = randomPosities(positieDriehoekX);
     positieVijandX = randomPosities(positieVijandX);
     bewegen = 5;
 }
-/* dit is het probleem
-if(positieVierkantX == (positieDriehoekX || positieGroteRechthoekX || positieRechthoekX || positieVijandX) ||
-   positieRechthoekX == (positieDriehoekX || positieGroteRechthoekX || positieVierkantX || positieVijandX) || 
-   positieGroteRechthoekX == (positieDriehoekX || positieRechthoekX || positieVierkantX || positieVijandX) ||
-   positieDriehoekX == (positieVierkantX || positieRechthoekX || positieGroteRechthoekX || positieVijandX) ||
-   positieVijandX == (positieDriehoekX || positieRechthoekX || positieVierkantX || positieGroteRechthoekX)) {
-    
-  positieVierkantX = -1;
-  positieDriehoekX = -1;
-  positieGroteRechthoekX = -1;
-  positieRechthoekX = -1;
-  positieVijandX = -1; 
-  bewegen = 0;
-};*/
+
+if( positieVaderX == (positieDriehoekX || positieRechthoekX || positieVierkantX || positieVijandX)){
+     positieVaderX = -1;
+}
+
+if(positieVijandX == (positieDriehoekX || positieRechthoekX || positieVierkantX || positieVaderX)) {
+      positieVijandX = -1;
+}
 
 
     lcd.createChar(1, rechthoek);
@@ -549,39 +682,65 @@ if(positieVierkantX == (positieDriehoekX || positieGroteRechthoekX || positieRec
     lcd.setCursor(positieVierkantX, positieVierkantOnderY);
     lcd.write(3); 
 
-    lcd.setCursor(positieGroteRechthoekX, positieGroteRechthoekBovenY);
-    lcd.write(1);
+    lcd.createChar(4, vaderBoven);
+    lcd.setCursor(positieVaderX, positieVaderBovenY);
+    lcd.write(4);
 
-    lcd.setCursor(positieGroteRechthoekX, positieGroteRechthoekOnderY);
-    lcd.write(1);
-
-     lcd.createChar(4, driehoekBoven);
-    lcd.setCursor(positieDriehoekX, positieDriehoekBovenY);
-    lcd.write(4); 
-
-    lcd.createChar(5, driehoekOnder);
-    lcd.setCursor(positieDriehoekX, positieDriehoekOnderY);
+     lcd.createChar(5, vaderOnder);
+    lcd.setCursor(positieVaderX, positieVaderOnderY);
     lcd.write(5);
 
-     lcd.createChar(6, vijandLichaamBoven);
+     lcd.createChar(6, zwaardAchter);
+    lcd.setCursor(positieZwaardAchterX, positieVaderBovenY);
+    lcd.write(6);
+    
+     lcd.createChar(7, zwaardVoor);
+    lcd.setCursor(positieZwaardVoorX, positieVaderBovenY);
+    lcd.write(7);
+    
+    lcd.begin(16, 2);
+     lcd.createChar(1, driehoekBoven);
+    lcd.setCursor(positieDriehoekX, positieDriehoekBovenY);
+    lcd.write(1); 
+
+    lcd.createChar(2, driehoekOnder);
+    lcd.setCursor(positieDriehoekX, positieDriehoekOnderY);
+    lcd.write(2);
+
+     lcd.createChar(3, vijandLichaamBoven);
     lcd.setCursor(positieVijandX, positieVijandBovenY);
+    lcd.write(3);
+
+    lcd.createChar(4, vijandLichaamOnder);
+    lcd.setCursor(positieVijandX, positieVijandOnderY);
+    lcd.write(4);
+
+    lcd.createChar(5, blastAchter);
+    lcd.setCursor(positieBlastAchterX, positieVijandOnderY);
+    lcd.write(5);
+
+    lcd.setCursor(positieBlastAchterX, positieVijandBovenY);
+    lcd.write(5);
+
+    lcd.createChar(6, blastVoor);
+    lcd.setCursor(positieBlastVoorX, positieVijandOnderY);
     lcd.write(6);
 
-    lcd.createChar(7, vijandLichaamOnder);
-    lcd.setCursor(positieVijandX, positieVijandOnderY);
-    lcd.write(7);
+
+    lcd.setCursor(positieBlastVoorX, positieVijandBovenY);
+    lcd.write(6);
 
 
     if ((tijd > tijdNu + 500 & gameModeStatus == EASY || tijd > tijdNu + 350 & gameModeStatus == NORMAL || tijd > tijdNu + 200 & gameModeStatus == HARD) & bewegen > 0){
        positieRechthoekX  = positieRechthoekX - 1;
     positieVierkantX = positieVierkantX - 1;
-    positieGroteRechthoekX = positieGroteRechthoekX - 1;
+    positieVaderX = positieVaderX - 1;
     positieDriehoekX = positieDriehoekX - 1;
     positieVijandX = positieVijandX - 1;
     tijdNu = millis();
     }
 
-  positieGroteRechthoekX = positieObjecten(positieGroteRechthoekX);
+  positieVaderX = positieObjecten(positieVaderX);
   positieDriehoekX = positieObjecten(positieDriehoekX);
   positieVierkantX = positieObjecten(positieVierkantX);
   positieRechthoekX = positieObjecten(positieRechthoekX);
@@ -677,12 +836,25 @@ if(positieVierkantX == (positieDriehoekX || positieGroteRechthoekX || positieRec
     lcd.setCursor(positieSpelerX, positieSpelerOnderY);
     lcd.write(2);
 
-    if(ledStatusGeel == LOW & ledStatusBlauw == LOW & ledStatusGroen == LOW & ledStatusRood == LOW) {
+    if(ledStatusGroen == HIGH & positieSpelerX == positieDriehoekX & tijd > tijdHart + 500) {
+      hartjes = hartjes + 0.5;
+      tijdHart = tijd;
+    }
+
+    if(ledStatusGeel == LOW & ledStatusGroen == LOW) {
       gameStatus = SPELEN; 
     }
-    if (positieRechthoekX == positieSpelerX || positieVierkantX == positieSpelerX & ledStatusGeel == LOW || positieGroteRechthoekX == positieSpelerX & ledStatusBlauw == LOW || positieDriehoekX == positieSpelerX & ledStatusGroen == LOW || positieVijandX == positieSpelerX & ledStatusRood == LOW) {
+   
+    if ((positieRechthoekX == positieSpelerX || positieVierkantX == positieSpelerX & ledStatusGeel == LOW || positieZwaardVoorX == positieSpelerX || positieBlastVoorX == positieSpelerX) & tijd > tijdHart + 500) {
+    hartjes = hartjes - 1;
+    tijdHart = tijd;
+    delay(1000);
+  }  if ((positieRechthoekX == positieSpelerX || positieVierkantX == positieSpelerX & ledStatusGeel == LOW || positieZwaardVoorX == positieSpelerX || positieBlastVoorX == positieSpelerX) & hartjes < 1) {
     gameStatus = GAMEOVER;
   }
+  
+  
+
  }
 
 
@@ -704,10 +876,10 @@ if(positieVierkantX == (positieDriehoekX || positieGroteRechthoekX || positieRec
       aftelling = 4;
       gameModeStatus = EASY;
       positieRechthoekX = 16;
-      positieVierkantX = 20;
-      positieGroteRechthoekX = 24;
-      positieDriehoekX = 28;
-      positieVijandX = 32;
+      positieVierkantX = 22;
+      positieVaderX = 28;
+      positieDriehoekX = 36;
+      positieVijandX = 40;
        bewegen = 5;
       digitalWrite(ledGeel, LOW);
       digitalWrite(ledBlauw, LOW);
