@@ -65,6 +65,8 @@ unsigned long tijdAftelling = 0;
 unsigned long tijdPagina = 0;
 unsigned long tijdGameMode = 0;
 unsigned long tijdHart = 0;
+unsigned long tijdRegels = 0;
+
 
 
 const int STARTSCHERM = 0;
@@ -89,6 +91,8 @@ float hartjes = 0;
 int aftelling = 4;
 
 int regelPagina = 0;
+
+int regels = 0;
 
 int gameMode = 0;
 
@@ -353,35 +357,55 @@ void loop() {
     lcd.setCursor(0, 0);
     lcd.print("Press White");
     lcd.setCursor(0, 1);
-    lcd.print("Button To Start");
+    lcd.print("To Start");
     if(tijd > tijdPagina + 500) {
       regelPagina = 0;
     }
     if (knopStatusWit == HIGH & regelPagina == 0) {
       gameStatus = REGELS;
       tijdPagina = tijd;
+      tijdRegels = tijd;
     } 
   }
 
   if (gameStatus == REGELS) {
     if(regelPagina == 0) {
-      lcd.begin(16, 2);
+      if(regels == 0) {
+         lcd.begin(16, 2);
       lcd.createChar(1, rechthoek);
     lcd.setCursor(14, 1);
     lcd.write(1);
     lcd.setCursor(0, 0);
     lcd.print("Press White");
     lcd.setCursor(0, 1);
-    lcd.print("Button For");
+    lcd.print("For:");
+    if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 1;
+      } 
+      }
+      if (regels == 1){
+         lcd.begin(16, 2);
+        lcd.setCursor(0, 0);
+    lcd.print("Press White");
+    lcd.setCursor(0, 1);
+    lcd.print("To Continue");
+      if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 0;
+      }}
     if(tijd > tijdPagina + 500) {   
     if (knopStatusWit == HIGH) {
       regelPagina = 1;
       tijdPagina = tijd;  
+      regels = 0;
+      tijdRegels = tijd;
     }
   }
     }
 
   if(regelPagina == 1) {
+    if(regels == 0){
   lcd.begin(16, 2);
     lcd.createChar(1, vierkantBoven);
     lcd.setCursor(14, 0);
@@ -392,16 +416,34 @@ void loop() {
     lcd.setCursor(0, 0);
     lcd.print("Press Yellow");
     lcd.setCursor(0, 1);
-    lcd.print("Button For");
+    lcd.print("For:");
+    if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 1;
+    }
+    }
+     if (regels == 1){
+       lcd.begin(16, 2);
+        lcd.setCursor(0, 0);
+    lcd.print("Press White");
+    lcd.setCursor(0, 1);
+    lcd.print("To Continue");
+      if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 0;
+      }}
     if(tijd > tijdPagina + 500) {
     if (knopStatusWit == HIGH) {
        regelPagina = 2;
-      tijdPagina = tijd;     
+      tijdPagina = tijd;  
+      regels = 0;   
+      tijdRegels = tijd;
     }
   }
   }
 
    if (regelPagina == 2) {
+    if(regels == 0) {
       lcd.begin(16, 2);
       lcd.createChar(1, vaderOnder);
     lcd.setCursor(14, 1);
@@ -418,15 +460,33 @@ void loop() {
     lcd.setCursor(0, 0);
     lcd.print("Press Blue");
     lcd.setCursor(0, 1);
-    lcd.print("Button For");
+    lcd.print("To Shoot:");
+     if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 1;
+     }
+    }  if (regels == 1){
+       lcd.begin(16, 2);
+        lcd.setCursor(0, 0);
+    lcd.print("Press White");
+    lcd.setCursor(0, 1);
+    lcd.print("To Continue");
+      if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 0;
+      }}
+
      if(tijd > tijdPagina + 500) {
     if (knopStatusWit == HIGH) {
       regelPagina = 3;
       tijdPagina = tijd;     
+      regels = 0;
+      tijdRegels = tijd;
     }
  }
    }
    if (regelPagina == 3) {
+    if(regels == 0) {
       lcd.begin(16, 2);
       lcd.createChar(1, driehoekBoven);
     lcd.setCursor(14, 0);
@@ -437,15 +497,44 @@ void loop() {
     lcd.setCursor(0, 0);
     lcd.print("Press Green");
     lcd.setCursor(0, 1);
-    lcd.print("Button For");
+    lcd.print("For:");
+    if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 1;
+      }
+    }
+    if (regels == 1){
+       lcd.begin(16, 2);
+        lcd.setCursor(0, 0);
+    lcd.print("The Triangle");
+    lcd.setCursor(0, 1);
+    lcd.print("Gives Hearts");
+      if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 2;
+      }}
+
+      if (regels == 2){
+         lcd.begin(16, 2);
+        lcd.setCursor(0, 0);
+    lcd.print("Press White");
+    lcd.setCursor(0, 1);
+    lcd.print("To Continue");
+      if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 0;
+      }}
      if(tijd > tijdPagina + 500) {
     if (knopStatusWit == HIGH) {
       regelPagina = 4;
       tijdPagina = tijd;     
+      regels = 0;
+      tijdRegels = tijd;
     }
   }
    }
   if (regelPagina == 4) {
+    if(regels == 0) {
       lcd.begin(16, 2);
       lcd.createChar(1, vijandLichaamBoven);
     lcd.setCursor(14, 0);
@@ -468,11 +557,28 @@ void loop() {
     lcd.setCursor(0, 0);
     lcd.print("Press Red");
     lcd.setCursor(0, 1);
-    lcd.print("Button For");
+    lcd.print("To Shoot:");
+    if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 1;
+      }
+    }
+    if (regels == 1){
+       lcd.begin(16, 2);
+        lcd.setCursor(0, 0);
+    lcd.print("Press White");
+    lcd.setCursor(0, 1);
+    lcd.print("To Continue");
+      if(tijd > tijdRegels + 3000){
+    tijdRegels = tijd;
+    regels = 0;
+      }}
      if(tijd > tijdPagina + 500) {
     if (knopStatusWit == HIGH) {
       gameStatus = HERHALING;
       tijdPagina = tijd;
+      regels = 0;
+      tijdRegels = tijd;
     }
   }
   }
@@ -487,11 +593,14 @@ void loop() {
     if(knopStatusGeel == HIGH){
       gameStatus = REGELS;
       regelPagina = 0;
+      regels = 0;
+      tijdRegels = tijd;
     }
      if(tijd > tijdPagina + 500) {
         if (knopStatusWit == HIGH) {
       gameStatus = GAMEMODE;
       tijdGameMode = tijd;
+      regels = 0;
     }
       }
   }
@@ -579,15 +688,6 @@ void loop() {
       kamehamehaX = 1;
     }
 
-    if (kamehamehaX == positieVijandX & ledStatusRood == HIGH) {
-      positieVijandX = -1;
-    }
-
-     if (kamehamehaX == positieVaderX & ledStatusBlauw == HIGH) {
-      positieVaderX = -1;
-    }
-
-
     if (knopStatusWit == HIGH & positieSpelerY == 1) {
       positieSpelerY = positieSpelerY - 1;
       delay(200);
@@ -603,8 +703,7 @@ void loop() {
     if ((positieRechthoekX == positieSpelerX & positieRechthoekY == positieSpelerY || positieVierkantX == positieSpelerX || positieZwaardVoorX == positieSpelerX  || positieBlastVoorX == positieSpelerX) & tijd > tijdHart + 500) {
     hartjes = hartjes - 1;
     tijdHart = tijd;
-    delay(1000);
-  } if ((positieRechthoekX == positieSpelerX & positieRechthoekY == positieSpelerY || positieVierkantX == positieSpelerX || positieZwaardVoorX == positieSpelerX  || positieBlastVoorX == positieSpelerX) & hartjes < 1) {
+  } if ((positieRechthoekX == positieSpelerX & positieRechthoekY == positieSpelerY || positieVierkantX == positieSpelerX || positieZwaardVoorX == positieSpelerX  || positieBlastVoorX == positieSpelerX) & hartjes < 0) {
     gameStatus = GAMEOVER;
   }
   
@@ -715,6 +814,14 @@ if(positieVijandX == (positieDriehoekX || positieRechthoekX || positieVierkantX 
     tijdNu = millis();
     }
 
+     if (kamehamehaX == positieVijandX & ledStatusRood == HIGH) {
+      positieVijandX = -1;
+    }
+
+     if (kamehamehaX == positieVaderX & ledStatusBlauw == HIGH) {
+      positieVaderX = -1;
+    }
+
   positieVaderX = positieObjecten(positieVaderX);
   positieDriehoekX = positieObjecten(positieDriehoekX);
   positieVierkantX = positieObjecten(positieVierkantX);
@@ -823,8 +930,7 @@ if(positieVijandX == (positieDriehoekX || positieRechthoekX || positieVierkantX 
     if ((positieRechthoekX == positieSpelerX || positieVierkantX == positieSpelerX & ledStatusGeel == LOW || positieZwaardVoorX == positieSpelerX || positieBlastVoorX == positieSpelerX) & tijd > tijdHart + 500) {
     hartjes = hartjes - 1;
     tijdHart = tijd;
-    delay(1000);
-  }  if ((positieRechthoekX == positieSpelerX || positieVierkantX == positieSpelerX & ledStatusGeel == LOW || positieZwaardVoorX == positieSpelerX || positieBlastVoorX == positieSpelerX) & hartjes < 1) {
+  }  if ((positieRechthoekX == positieSpelerX || positieVierkantX == positieSpelerX & ledStatusGeel == LOW || positieZwaardVoorX == positieSpelerX || positieBlastVoorX == positieSpelerX) & hartjes < 0) {
     gameStatus = GAMEOVER;
   }
   
@@ -846,6 +952,7 @@ if(positieVijandX == (positieDriehoekX || positieRechthoekX || positieVierkantX 
     if (knopStatusWit == HIGH) {
       gameStatus = STARTSCHERM;
       score = 0;
+      hartjes = 0;
       regelPagina = -1;
       tijdPagina = tijd;
       aftelling = 4;
@@ -874,6 +981,10 @@ if(positieVijandX == (positieDriehoekX || positieRechthoekX || positieVierkantX 
       ledStatusBlauw = LOW;
       ledStatusGroen = LOW;
       ledStatusRood = LOW;
+positieZwaardAchterX = positieVaderX - 1;
+ positieZwaardVoorX = positieVaderX - 2;
+ positieBlastAchterX =  positieVijandX - 1;
+ positieBlastVoorX =  positieVijandX - 2;
 
 
      
