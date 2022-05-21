@@ -302,32 +302,6 @@ int positieObjecten (int positieObject) {
     }
     return positieObject;
   }
-/*
-int knopStatussen (int knopKleur, int ledStatusKleur, int ledKleur) {if (knopStatus == uitKnopLos) {
-   if(digitalRead(knopKleur) == HIGH & ledStatusKleur == LOW) {
-    knopStatus = aanKnopIn;
-    digitalWrite(ledKleur, HIGH);
-    ledStatusKleur = HIGH;
-     }}
-if (knopStatus == aanKnopIn) {
-   if(digitalRead(knopKleur) == LOW & ledStatusKleur == HIGH) {
-    knopStatus = aanKnopLos;
-    digitalWrite(ledKleur, HIGH);
-     }}
-if (knopStatus == aanKnopLos) {
-   if(digitalRead(knopKleur) == HIGH & ledStatusKleur == HIGH) {
-    knopStatus = uitKnopIn;
-    digitalWrite(ledKleur, LOW);
-     }}     
-if (knopStatus == uitKnopIn) {
-   if(digitalRead(knopKleur) == LOW & ledStatusKleur == HIGH) {
-    knopStatus = uitKnopLos;
-    digitalWrite(ledKleur, LOW);
-    ledStatusKleur = LOW;
-     }
-     }
-     return knopKleur;
-}*/
 
 // deze functie vult een random waarde in de array in waardoor het object iedere keer en andere waarde uit de array krijgt, hierdoor is het randomised, maar wel met vaste intervallen.
 int randomPosities (int positieObjectX) {
@@ -359,6 +333,7 @@ void setup() {
   pinMode(ledRood, OUTPUT);
   pinMode(ledBlauw, OUTPUT);
    Serial.begin(9600);
+  randomSeed(analogRead(0));
 }
 
 void loop() {
